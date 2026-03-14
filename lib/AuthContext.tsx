@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const msg = error.message.toLowerCase()
         if (msg.includes('already') || msg.includes('registered') || msg.includes('taken')) return 'exists'
         if (msg.includes('rate') || msg.includes('429') || error.status === 429) return 'rate_limit'
-        if (msg.includes('password') && msg.includes('6')) return 'weak_password'
+        if (msg.includes('password') || error.status === 422) return 'weak_password'
         return error.message
       }
       if (data.user) {

@@ -33,8 +33,8 @@ export default function RegistroPage() {
       setError('Ingresá un email válido.')
       return
     }
-    if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.')
+    if (password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres.')
       return
     }
     if (password !== password2) {
@@ -53,7 +53,7 @@ export default function RegistroPage() {
     } else if (result === 'rate_limit') {
       setError('Demasiados intentos. Esperá unos minutos y volvé a intentar.')
     } else if (result === 'weak_password') {
-      setError('La contraseña debe tener al menos 6 caracteres.')
+      setError('La contraseña debe tener al menos 8 caracteres.')
     } else {
       setError('No se pudo crear la cuenta. Verificá los datos e intentá de nuevo.')
     }
@@ -126,7 +126,7 @@ export default function RegistroPage() {
               <input
                 className="form-input"
                 type={showPass ? 'text' : 'password'}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 8 caracteres"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 autoComplete="new-password"
