@@ -55,7 +55,7 @@ export default function RegistroPage() {
     } else if (result === 'weak_password') {
       setError('La contraseña debe tener al menos 8 caracteres.')
     } else {
-      setError('No se pudo crear la cuenta. Verificá los datos e intentá de nuevo.')
+      setError(typeof result === 'string' ? result : 'No se pudo crear la cuenta. Intentá de nuevo.')
     }
   }
 
