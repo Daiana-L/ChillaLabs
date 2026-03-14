@@ -16,6 +16,7 @@ export interface Product {
   eta?: string
   wait?: string
   desc?: string
+  image?: string
 }
 
 export interface CartItem {
@@ -39,8 +40,18 @@ export interface OrderRecord {
   date: string
   items: { name: string; qty: number; price: number }[]
   total: number
+  subtotal?: number
+  shippingCost?: number
+  discountAmount?: number
+  discountCode?: string
   status?: string
   payment: string
+  buyerName?: string
+  phone?: string
+  address?: string
+  city?: string
+  province?: string
+  cp?: string
 }
 
 export interface ShippingOption {

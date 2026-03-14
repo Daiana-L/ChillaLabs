@@ -6,7 +6,6 @@ import { ShoppingCart, Plus, Minus, Tag, ChevronLeft, ChevronRight, CheckCircle,
 import { PRODUCTS } from '@/lib/products'
 import { useCart } from '@/lib/CartContext'
 import { useToast } from '@/lib/ToastContext'
-import { CubeSVG } from '@/lib/cubeSVG'
 import ProductCard from '@/components/ProductCard'
 
 const SLIDE_LABELS = ['VISTA FRONTAL', 'VISTA LATERAL', 'DETALLE', 'ESCALA']
@@ -93,12 +92,12 @@ export default function ProductoPage() {
                 <div
                   key={i}
                   className="carousel-slide"
-                  style={{ background: product.bg, flexDirection: 'column', gap: '0.75rem' }}
+                  style={{ background: product.bg }}
                 >
-                  <CubeSVG size={180} />
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-light)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    {SLIDE_LABELS[i]}
-                  </span>
+                  {product.image
+                    ? <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1.5rem' }} />
+                    : <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-light)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{SLIDE_LABELS[i]}</span>
+                  }
                 </div>
               ))}
             </div>
@@ -129,9 +128,12 @@ export default function ProductoPage() {
                 key={i}
                 className={`gallery-thumb${imgIndex === i ? ' thumb-active' : ''}`}
                 onClick={() => setImgIndex(i)}
-                style={{ background: product.bg }}
+                style={{ background: product.bg, overflow: 'hidden', padding: 0 }}
               >
-                <CubeSVG size={40} />
+                {product.image
+                  ? <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : null
+                }
               </button>
             ))}
           </div>

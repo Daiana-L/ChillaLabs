@@ -75,16 +75,16 @@ nav {
 .section-desc { color: var(--text-light); font-size: 0.97rem; max-width: 480px; margin: 0 auto; line-height: 1.7; }
 
 /* ─── HERO ──────────────────────────── */
-.hero { background: linear-gradient(135deg, #F0E6FF 0%, #EDE0FF 40%, #E8D8FF 100%); min-height: calc(100vh - 76px); display: flex; align-items: center; position: relative; overflow: hidden; padding: 4rem 2rem; }
+.hero { background: linear-gradient(135deg, #F0E6FF 0%, #EDE0FF 40%, #E8D8FF 100%); display: flex; align-items: center; position: relative; overflow: hidden; padding: 2.5rem 2rem; }
 .hero-blob-1 { position: absolute; top: -120px; right: -120px; width: 560px; height: 560px; background: radial-gradient(circle, rgba(204,182,234,0.35) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
 .hero-blob-2 { position: absolute; bottom: -100px; left: -100px; width: 440px; height: 440px; background: radial-gradient(circle, rgba(152,128,187,0.2) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
 .hero-dots { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, rgba(99,80,129,0.06) 1px, transparent 1px); background-size: 32px 32px; }
 .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 1; width: 100%; }
-.hero-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.8); border: 1.5px solid rgba(204,182,234,0.7); padding: 0.4rem 1.1rem; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; color: var(--mid); margin-bottom: 1.5rem; backdrop-filter: blur(8px); }
+.hero-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.8); border: 1.5px solid rgba(204,182,234,0.7); padding: 0.3rem 0.85rem; border-radius: var(--radius-pill); font-size: 0.72rem; font-weight: 700; color: var(--mid); margin-bottom: 0.9rem; backdrop-filter: blur(8px); }
 .hero-badge-dot { width: 7px; height: 7px; background: var(--mid); border-radius: 50%; }
-.hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2.5rem; border-top: 1.5px solid rgba(204,182,234,0.5); }
-.hero-stat-num { font-size: 1.6rem; font-weight: 900; color: var(--deep); }
-.hero-stat-label { font-size: 0.76rem; color: var(--text-light); font-weight: 600; margin-top: 2px; }
+.hero-stats { display: flex; gap: 1.25rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1.5px solid rgba(204,182,234,0.5); }
+.hero-stat-num { font-size: 1.2rem; font-weight: 900; color: var(--deep); }
+.hero-stat-label { font-size: 0.68rem; color: var(--text-light); font-weight: 600; margin-top: 1px; }
 .hero-mascot-wrap { position: relative; width: 580px; height: 580px; margin: 0 auto; }
 .hero-mascot-glow { position: absolute; inset: 10%; background: radial-gradient(circle at 50% 55%, rgba(204,182,234,0.55) 0%, transparent 65%); border-radius: 50%; }
 .hero-mascot-img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2; animation: float 4.5s ease-in-out infinite; filter: drop-shadow(0 24px 48px rgba(99,80,129,0.22)); }
@@ -93,9 +93,9 @@ nav {
 @keyframes fcube { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(12deg); } }
 
 /* ─── FEATURES STRIP ────────────────── */
-.features-strip { background: var(--deep); padding: 1.4rem 2rem; }
-.features-strip-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
-.feature-item { display: flex; align-items: center; gap: 9px; color: rgba(255,255,255,0.9); font-weight: 700; font-size: 0.88rem; }
+.features-strip { background: var(--deep); padding: 1.1rem 2rem; }
+.features-strip-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.feature-item { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.9); font-weight: 700; font-size: 0.75rem; }
 
 /* ─── PRODUCT CARDS ─────────────────── */
 .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
@@ -538,9 +538,9 @@ footer { background: linear-gradient(135deg, #9880BB 0%, var(--deep) 55%, #63508
 }
 
 /* ─── HERO H1 ────────────────────────── */
-.hero h1 { font-size: clamp(2.4rem, 4vw, 3.5rem); font-weight: 900; color: var(--deep); line-height: 1.08; margin-bottom: 1.2rem; }
+.hero h1 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 900; color: var(--deep); line-height: 1.1; margin-bottom: 0.75rem; }
 .hero h1 .accent { color: var(--mid); }
-.hero-desc { font-size: 1.05rem; color: var(--text-light); line-height: 1.75; margin-bottom: 2rem; max-width: 440px; }
+.hero-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.65; margin-bottom: 1.25rem; max-width: 380px; }
 .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 .hero-mascot-fallback { position: absolute; inset: 0; z-index: 2; display: none; align-items: center; justify-content: center; color: var(--mid); }
 

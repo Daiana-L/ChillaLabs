@@ -29,12 +29,12 @@ export default function HomePage() {
               Cada modelo se fabrica con PLA y se termina artesanalmente para que tengas una pieza única para tu colección.
             </p>
             <div className="hero-actions">
-              <Link href="/stock" className="btn-primary">
-                <Gamepad2 size={16} />
+              <Link href="/stock" className="btn-primary" style={{ padding: '0.6rem 1.4rem', fontSize: '0.85rem' }}>
+                <Gamepad2 size={14} />
                 Ver figuras
               </Link>
-              <Link href="/preventas" className="btn-outline">
-                <Calendar size={16} />
+              <Link href="/preventas" className="btn-outline" style={{ padding: '0.6rem 1.4rem', fontSize: '0.85rem' }}>
+                <Calendar size={14} />
                 Preventas
               </Link>
             </div>
@@ -58,21 +58,21 @@ export default function HomePage() {
           <div className="hero-mascot-wrap">
             <div className="hero-mascot-glow" />
             <div className="f-cube" style={{top:'8%',left:'2%',animationDelay:'-2s'}}>
-              <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+              <svg width="54" height="54" viewBox="0 0 40 40" fill="none">
                 <rect x="8" y="18" width="24" height="16" rx="3" fill="#CCB6EA" opacity="0.75"/>
                 <polygon points="8,18 20,10 32,18" fill="#9880BB" opacity="0.75"/>
                 <polygon points="32,18 32,34 20,42 20,26" fill="#7B5FA0" opacity="0.6"/>
               </svg>
             </div>
             <div className="f-cube" style={{bottom:'18%',right:'-4%',animationDelay:'-3.5s'}}>
-              <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+              <svg width="42" height="42" viewBox="0 0 40 40" fill="none">
                 <rect x="8" y="18" width="24" height="16" rx="3" fill="#CCB6EA" opacity="0.55"/>
                 <polygon points="8,18 20,10 32,18" fill="#9880BB" opacity="0.55"/>
                 <polygon points="32,18 32,34 20,42 20,26" fill="#7B5FA0" opacity="0.45"/>
               </svg>
             </div>
             <div className="f-cube" style={{top:'55%',left:'-5%',animationDelay:'-1s'}}>
-              <svg width="16" height="16" viewBox="0 0 40 40" fill="none">
+              <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
                 <rect x="8" y="18" width="24" height="16" rx="3" fill="#635081" opacity="0.3"/>
                 <polygon points="8,18 20,10 32,18" fill="#9880BB" opacity="0.35"/>
               </svg>
@@ -90,16 +90,16 @@ export default function HomePage() {
       {/* Features strip */}
       <div className="features-strip">
         <div className="features-strip-inner">
-          <div className="feature-item"><Printer size={20} /> Impresión 3D en PLA</div>
-          <div className="feature-item"><Paintbrush size={20} /> Pintado a mano</div>
-          <div className="feature-item"><Package size={20} /> Envío seguro</div>
-          <div className="feature-item"><Heart size={20} /> Hecho con amor</div>
-          <div className="feature-item"><Sparkles size={20} /> Piezas únicas</div>
+          <div className="feature-item"><Printer size={14} /> Impresión 3D en PLA</div>
+          <div className="feature-item"><Paintbrush size={14} /> Pintado a mano</div>
+          <div className="feature-item"><Package size={14} /> Envío seguro</div>
+          <div className="feature-item"><Heart size={14} /> Hecho con amor</div>
+          <div className="feature-item"><Sparkles size={14} /> Piezas únicas</div>
         </div>
       </div>
 
       {/* Featured products */}
-      <section className="section" style={{background:'var(--white)'}}>
+      <section className="section" style={{background:'var(--white)', paddingTop:'1.5rem'}}>
         <div className="section-inner">
           <div className="section-header">
             <div className="eyebrow">

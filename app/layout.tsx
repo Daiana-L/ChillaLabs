@@ -3,8 +3,7 @@ import "./globals.css";
 import { CartProvider } from '@/lib/CartContext'
 import { AuthProvider } from '@/lib/AuthContext'
 import { ToastProvider } from '@/lib/ToastContext'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import PublicShell from '@/components/PublicShell'
 
 export const metadata: Metadata = {
   title: 'ChillaLabs – Figuras 3D',
@@ -18,9 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <CartProvider>
             <ToastProvider>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
+              <PublicShell>{children}</PublicShell>
             </ToastProvider>
           </CartProvider>
         </AuthProvider>

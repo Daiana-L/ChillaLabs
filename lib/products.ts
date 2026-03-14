@@ -9,16 +9,16 @@ export const DESCS: Record<number, string> = {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: 1, name: "Totoro Clásico",    series: "Studio Ghibli",        price: 24.99, type: "stock",    category: "Anime",       size: "12 cm", bg: "#E8F5EE" },
-  { id: 2, name: "Pikachu",           series: "Pokémon",               price: 19.99, type: "stock",    category: "Anime",       size: "8 cm",  bg: "#FFF8D6" },
-  { id: 3, name: "Link – Hyrule",     series: "The Legend of Zelda",   price: 32.99, type: "stock",    category: "Videojuegos", size: "15 cm", bg: "#E6F7EE" },
-  { id: 4, name: "Kirby Rosa",        series: "Nintendo",              price: 17.99, type: "stock",    category: "Videojuegos", size: "7 cm",  bg: "#FEE8EF" },
-  { id: 5, name: "Baby Yoda – Grogu", series: "The Mandalorian",       price: 26.99, type: "stock",    category: "Originales",  size: "9 cm",  bg: "#E8F5E0" },
-  { id: 6, name: "Nezuko",            series: "Demon Slayer",          price: 28.99, type: "preventa", category: "Anime",       size: "14 cm", bg: "#FDE8F0", wait: "3–4 semanas",
+  { id: 1, name: "Reze",    series: "ChainsawMan",        price: 24.99, type: "stock",    category: "Anime",       size: "25 cm", bg: "#E8F5EE", image: "/stock-1.png" },
+  { id: 2, name: "MaoMao",           series: "The Apothecary Diaries",               price: 19.99, type: "stock",    category: "Anime",       size: "26 cm",  bg: "#FFF8D6", image: "/stock-2.png" },
+  { id: 3, name: "Link – Hyrule",     series: "The Legend of Zelda",   price: 32.99, type: "stock",    category: "Videojuegos", size: "15 cm", bg: "#E6F7EE", image: "/stock-3.png" },
+  { id: 4, name: "Reze",        series: "chainsawman",              price: 17.99, type: "stock",    category: "Videojuegos", size: "17 cm",  bg: "#FEE8EF", image: "/stock-1.png" },
+  { id: 5, name: "Baby Yoda – Grogu", series: "The Mandalorian",       price: 26.99, type: "stock",    category: "Originales",  size: "9 cm",  bg: "#E8F5E0", image: "/stock-2.png" },
+  { id: 6, name: "Nezuko",            series: "Demon Slayer",          price: 28.99, type: "preventa", category: "Anime",       size: "14 cm", bg: "#FDE8F0", wait: "3–4 semanas", image: "/preventa-1.png",
     desc: "Nezuko en su forma demonio con su bambú. Detallada con kimono rosado pintado a mano." },
-  { id: 7, name: "Hollow Knight",     series: "Team Cherry",           price: 34.99, type: "preventa", category: "Videojuegos", size: "10 cm", bg: "#EBE8F5", wait: "4–5 semanas",
+  { id: 7, name: "Hollow Knight",     series: "Team Cherry",           price: 34.99, type: "preventa", category: "Videojuegos", size: "10 cm", bg: "#EBE8F5", wait: "4–5 semanas", image: "/preventa-2.png",
     desc: "El Caballero de Hallownest. Negro profundo con capa blanca y máscara artesanal." },
-  { id: 8, name: "Snorlax",           series: "Pokémon",               price: 21.99, type: "preventa", category: "Anime",       size: "11 cm", bg: "#E0EAF8", wait: "2–3 semanas",
+  { id: 8, name: "Snorlax",           series: "Pokémon",               price: 21.99, type: "preventa", category: "Anime",       size: "11 cm", bg: "#E0EAF8", wait: "2–3 semanas", image: "/preventa-3.png",
     desc: "El Pokémon dormilón más querido de la Gen 1. Azul oscuro con barriga crema." },
 ]
 

@@ -77,8 +77,18 @@ export default function CheckoutPage() {
         date: today,
         items: cart.map(i => ({ name: i.product.name, qty: i.quantity, price: i.product.price })),
         total,
+        subtotal,
+        shippingCost: shipping?.cost ?? 0,
+        discountAmount: discountAmount || 0,
+        discountCode: discountApplied ? discountCode : undefined,
         status: payment === 'mp' ? 'paid' : 'pending',
         payment,
+        buyerName: name,
+        phone,
+        address,
+        city,
+        province,
+        cp,
       })
     }
 

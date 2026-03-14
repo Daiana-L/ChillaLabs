@@ -4,7 +4,6 @@ import { CheckCircle, Calendar, Plus, Clock } from 'lucide-react'
 import { Product } from '@/types'
 import { useCart } from '@/lib/CartContext'
 import { useToast } from '@/lib/ToastContext'
-import { CubeSVG } from '@/lib/cubeSVG'
 
 export default function ProductCard({ product }: { product: Product }) {
   const router = useRouter()
@@ -22,7 +21,10 @@ export default function ProductCard({ product }: { product: Product }) {
     <div className="product-card" onClick={() => router.push(`/producto/${product.id}`)}>
       <div className="product-img-wrap" style={{ background: product.bg }}>
         <div className="product-img-inner">
-          <CubeSVG size={110} />
+          {product.image
+            ? <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--mid)', fontSize: '3rem' }}>🎭</div>
+          }
         </div>
         <span className={`product-badge ${isStock ? 'badge-stock' : 'badge-preventa'}`}>
           {isStock ? <CheckCircle size={11} /> : <Calendar size={11} />}
