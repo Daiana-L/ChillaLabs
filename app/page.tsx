@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { Gamepad2, Calendar, Star, ArrowRight, Printer, Layers, Paintbrush, ShoppingBag, Package, Heart, Sparkles, FlaskConical } from 'lucide-react'
+import { Gamepad2, Calendar, Star, ArrowRight, Printer, Layers, Paintbrush, ShoppingBag, Package, Heart, Sparkles, FlaskConical, MessageCircle } from 'lucide-react'
 import { PRODUCTS } from '@/lib/products'
 import ProductCard from '@/components/ProductCard'
 
@@ -158,26 +158,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA */}
+           {/* CTA */}
       <section className="cta-section">
-        <div className="cta-blob" style={{width:'300px',height:'300px',top:'-60px',right:'-60px'}} />
-        <div className="cta-blob" style={{width:'200px',height:'200px',bottom:'-40px',left:'80px'}} />
-        <div style={{position:'relative',zIndex:1}}>
-          <img
-            className="cta-mascot-img"
-            src="/chilla-logo.png"
-            alt=""
-            onError={e => { (e.target as HTMLImageElement).style.display='none' }}
-          />
-          <h2>¿Listo para tu figura?</h2>
-          <p>Explora nuestra colección completa o reserva tu figura en preventa.</p>
+        <div className="cta-blob" style={{ width: '300px', height: '300px', top: '-60px', right: '-60px' }} />
+        <div className="cta-blob" style={{ width: '200px', height: '200px', bottom: '-40px', left: '80px' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2>¿Querés una figura de tu waifu o personaje favorito?</h2>
+
+          <p>
+            Si tenés una idea o personaje en mente, escribime y vemos si se puede hacer.
+          </p>
+
           <div className="cta-actions">
-            <Link href="/stock" className="btn-cta-white">
-              <ShoppingBag size={18} style={{color:'var(--deep)'}} />
-              Ver En Stock
+            <Link href="/contacto" className="btn-cta-white">
+              <MessageCircle size={18} style={{ color: 'var(--deep)' }} />
+              Contactarme
             </Link>
+
             <Link href="/preventas" className="btn-ghost">
-              <Calendar size={18} />
+              <ArrowRight size={18} />
               Ver Preventas
             </Link>
           </div>
