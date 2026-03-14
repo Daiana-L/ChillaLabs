@@ -27,9 +27,15 @@ export default function ConfirmacionPage() {
       router.replace('/')
       return
     }
-    setOrder(JSON.parse(stored))
-    localStorage.removeItem('chillalabs_last_order')
-  }, [router])
+    const parsed = JSON.parse(stored)
+    // Redirigir si el pedido tiene más de 30 minutos (dato viejo)
+    if (parsed._ts && Date.now() - parsed._ts > 30 * 60 * 1000) {
+      localStorage.removeItem('chillalabs_last_order')
+      router.replace('/')
+      return
+    }
+    setOrder(parsed)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!order) return null
 

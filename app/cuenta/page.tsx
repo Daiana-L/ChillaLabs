@@ -1,15 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Package, LogOut, Edit3, Save, X, Phone, Mail, CheckCircle } from 'lucide-react'
+import { User, Package, LogOut, Edit3, Save, X, Phone, Mail, CheckCircle, MapPin, Tag, Truck, MessageCircle, Instagram } from 'lucide-react'
 import { useAuth } from '@/lib/AuthContext'
 import { useToast } from '@/lib/ToastContext'
+import { PRODUCTS } from '@/lib/products'
 
 type Tab = 'datos' | 'pedidos'
 
 export default function CuentaPage() {
   const router = useRouter()
-  const { currentUser: user, logout, updateProfile } = useAuth()
+  const { currentUser: user, authLoading, logout, updateProfile } = useAuth()
   const { showToast } = useToast()
   const [tab, setTab] = useState<Tab>('datos')
   const [editing, setEditing] = useState(false)
@@ -18,10 +19,10 @@ export default function CuentaPage() {
   const [saveMsg, setSaveMsg] = useState(false)
 
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       router.replace('/login')
     }
-  }, [user, router])
+  }, [user, authLoading, router])
 
   useEffect(() => {
     if (user) {
@@ -30,7 +31,7 @@ export default function CuentaPage() {
     }
   }, [user])
 
-  if (!user) return null
+  if (authLoading || !user) return null
 
   const handleLogout = () => {
     logout()
@@ -38,9 +39,9 @@ export default function CuentaPage() {
     router.replace('/')
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editName.trim()) return
-    updateProfile({ name: editName.trim(), phone: editPhone.trim() })
+    await updateProfile({ name: editName.trim(), phone: editPhone.trim() })
     setEditing(false)
     setSaveMsg(true)
     showToast('Perfil actualizado')
@@ -223,38 +224,137 @@ export default function CuentaPage() {
                 <Package size={48} style={{ color: 'var(--light)', marginBottom: '1rem' }} />
                 <p style={{ fontWeight: 700, color: 'var(--deep)', marginBottom: '0.5rem' }}>Aún no tenés pedidos</p>
                 <p style={{ color: 'var(--text-light)', marginBottom: '1.5rem' }}>¡Explorá nuestras figuras y hacé tu primera compra!</p>
-                <a href="/stock" className="btn-primary">
-                  Ver figuras
-                </a>
+                <a href="/stock" className="btn-primary">Ver figuras</a>
               </div>
             ) : (
               <div className="orders-list">
-                {[...user.orders].reverse().map(order => (
-                  <div className="order-card" key={order.orderNum}>
-                    <div className="order-card-header">
-                      <div>
-                        <div className="order-num">Pedido #{order.orderNum}</div>
-                        <div className="order-date">{order.date}</div>
-                      </div>
-                      <div className="order-total">${order.total.toFixed(2)}</div>
-                    </div>
-                    <div className="order-items">
-                      {order.items.map((item, i) => (
-                        <div className="order-item-row" key={i}>
-                          <span className="order-item-name">{item.name}</span>
-                          <span className="order-item-qty">×{item.qty}</span>
-                          <span className="order-item-price">${(item.price * item.qty).toFixed(2)}</span>
+                {[...user.orders].reverse().map(order => {
+                  const statusLabel = order.status === 'paid' ? 'Pagado' : order.status === 'shipped' ? 'Enviado' : 'Pendiente'
+                  const hasAddress = order.address || order.city || order.province
+                  return (
+                    <div className="order-card" key={order.orderNum}>
+                      {/* Header */}
+                      <div className="order-card-header">
+                        <div>
+                          <div className="order-num">Pedido #{order.orderNum}</div>
+                          <div className="order-date">{order.date}</div>
                         </div>
-                      ))}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.35rem' }}>
+                          <span className={`order-status order-status-${order.status || 'pending'}`}>{statusLabel}</span>
+                          <span className="order-payment">{order.payment === 'mp' ? 'Mercado Pago' : 'Transferencia'}</span>
+                        </div>
+                      </div>
+
+                      {/* Items */}
+                      <div className="order-items-detail">
+                        <div className="order-section-label">Productos</div>
+                        {order.items.map((item, i) => {
+                          const product = PRODUCTS.find(p => p.name.toLowerCase() === item.name.toLowerCase())
+                          return (
+                            <div className="order-item-detail-row" key={i}>
+                              <div className="order-item-img-wrap">
+                                {product?.image
+                                  ? <img src={product.image} alt={item.name} style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: 8 }} />
+                                  : <div style={{ width: 48, height: 48, background: 'var(--pale)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={20} style={{ color: 'var(--mid)' }} /></div>
+                                }
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontWeight: 700, color: 'var(--deep)', fontSize: '0.88rem' }}>{item.name}</div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--text-light)' }}>×{item.qty} · ${item.price.toFixed(2)} c/u</div>
+                              </div>
+                              <div style={{ fontWeight: 800, color: 'var(--deep)', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>${(item.price * item.qty).toFixed(2)}</div>
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                      {/* Dirección */}
+                      {hasAddress && (
+                        <div className="order-section">
+                          <div className="order-section-label"><MapPin size={13} /> Entrega</div>
+                          <div style={{ fontSize: '0.83rem', color: 'var(--text-light)', lineHeight: 1.5 }}>
+                            {order.buyerName && <div style={{ fontWeight: 700, color: 'var(--text)' }}>{order.buyerName}</div>}
+                            {order.address && <div>{order.address}</div>}
+                            {(order.city || order.province || order.cp) && (
+                              <div>{[order.city, order.province, order.cp].filter(Boolean).join(', ')}</div>
+                            )}
+                            {order.phone && <div>{order.phone}</div>}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Resumen de precios */}
+                      <div className="order-section order-summary">
+                        {order.subtotal != null && order.subtotal !== order.total && (
+                          <div className="order-summary-row">
+                            <span>Subtotal</span>
+                            <span>${order.subtotal.toFixed(2)}</span>
+                          </div>
+                        )}
+                        {(order.shippingCost ?? 0) > 0 && (
+                          <div className="order-summary-row">
+                            <span><Truck size={12} /> {order.shippingLabel || 'Envío'}</span>
+                            <span>${(order.shippingCost ?? 0).toFixed(2)}</span>
+                          </div>
+                        )}
+                        {(order.discountAmount ?? 0) > 0 && (
+                          <div className="order-summary-row" style={{ color: '#2A8A50' }}>
+                            <span><Tag size={12} /> Descuento{order.discountCode ? ` (${order.discountCode})` : ''}</span>
+                            <span>-${(order.discountAmount ?? 0).toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="order-summary-row order-summary-total">
+                          <span>Total</span>
+                          <span>${order.total.toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      {/* Info de transferencia para pedidos pendientes */}
+                      {order.payment === 'transfer' && (!order.status || order.status === 'pending') && (
+                        <div className="order-section order-transfer-info">
+                          <div className="order-section-label">Datos para transferir</div>
+                          <div style={{ fontSize: '0.83rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.85rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <span style={{ color: 'var(--text-light)', fontWeight: 600 }}>Alias</span>
+                              <span style={{ fontWeight: 800, color: 'var(--deep)' }}>chillalabs.mp</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <span style={{ color: 'var(--text-light)', fontWeight: 600 }}>Titular</span>
+                              <span style={{ fontWeight: 700, color: 'var(--text)' }}>Dai ChillaLabs</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <span style={{ color: 'var(--text-light)', fontWeight: 600 }}>Banco</span>
+                              <span style={{ fontWeight: 700, color: 'var(--text)' }}>Mercado Pago</span>
+                            </div>
+                          </div>
+                          <p style={{ fontSize: '0.78rem', color: 'var(--text-light)', marginBottom: '0.75rem', lineHeight: 1.55 }}>
+                            Enviá el comprobante con el Nº <strong style={{ color: 'var(--deep)' }}>{order.orderNum}</strong> por:
+                          </p>
+                          <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <a
+                              href="https://wa.me/541100000000"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-primary"
+                              style={{ flex: 1, justifyContent: 'center', padding: '0.55rem', fontSize: '0.8rem' }}
+                            >
+                              <MessageCircle size={14} /> WhatsApp
+                            </a>
+                            <a
+                              href="https://instagram.com/chillalabs"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn-outline"
+                              style={{ flex: 1, justifyContent: 'center', padding: '0.55rem', fontSize: '0.8rem' }}
+                            >
+                              <Instagram size={14} /> Instagram
+                            </a>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <div className="order-card-footer">
-                      <span className={`order-status order-status-${order.status || 'pending'}`}>
-                        {order.status === 'paid' ? 'Pagado' : order.status === 'shipped' ? 'Enviado' : 'Pendiente'}
-                      </span>
-                      <span className="order-payment">{order.payment === 'mp' ? 'Mercado Pago' : 'Transferencia'}</span>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

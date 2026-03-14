@@ -1,7 +1,9 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { X, User, MapPin, CreditCard, Tag, Package } from 'lucide-react'
 import { AdminOrder } from '@/lib/adminOrders'
 import { getAllProducts } from '@/lib/adminProducts'
+import { Product } from '@/types'
 import AdminStatusSelector, { STATUS_COLORS, STATUS_LABELS } from './AdminStatusSelector'
 
 function Section({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) {
@@ -35,7 +37,8 @@ export default function AdminOrderModal({
   onClose: () => void
   onStatusChange: (orderNum: string, status: string) => void
 }) {
-  const products = getAllProducts()
+  const [products, setProducts] = useState<Product[]>([])
+  useEffect(() => { getAllProducts().then(setProducts) }, [])
   const sc = STATUS_COLORS[order.status || 'pending'] || STATUS_COLORS.pending
   const subtotal = order.subtotal ?? order.items.reduce((s, i) => s + i.price * i.qty, 0)
 
@@ -133,7 +136,10 @@ export default function AdminOrderModal({
               <Row label={`Descuento${order.discountCode ? ` (${order.discountCode})` : ''}`} value={`-$${order.discountAmount.toFixed(2)}`} />
             ) : null}
             {order.shippingCost !== undefined && (
-              <Row label="Envío" value={order.shippingCost > 0 ? `$${order.shippingCost.toFixed(2)}` : 'Gratis'} />
+              <Row
+                label={order.shippingLabel ? `Envío (${order.shippingLabel})` : 'Envío'}
+                value={order.shippingCost > 0 ? `$${order.shippingCost.toFixed(2)}` : 'Gratis'}
+              />
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.65rem 0', fontSize: '1rem', marginTop: '0.25rem' }}>
               <span style={{ fontWeight: 800, color: 'var(--deep)' }}>Total</span>

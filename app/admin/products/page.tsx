@@ -15,8 +15,9 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState<Omit<Product, 'id'>>(EMPTY)
   const [editId, setEditId] = useState<number | null>(null)
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null)
+  const [saving, setSaving] = useState(false)
 
-  const load = () => setProducts(getAllProducts())
+  const load = () => getAllProducts().then(setProducts)
   useEffect(() => { load() }, [])
 
   const openNew = () => { setForm(EMPTY); setModal('new') }
@@ -27,15 +28,16 @@ export default function AdminProductsPage() {
   }
   const closeModal = () => { setModal(null); setEditId(null); setForm(EMPTY) }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name || !form.price) return
-    if (modal === 'new') addProduct(form)
-    else if (modal === 'edit' && editId !== null) updateProduct({ ...form, id: editId })
-    load(); closeModal()
+    setSaving(true)
+    if (modal === 'new') await addProduct(form)
+    else if (modal === 'edit' && editId !== null) await updateProduct({ ...form, id: editId })
+    await load(); closeModal(); setSaving(false)
   }
 
-  const handleDelete = (id: number) => {
-    deleteProduct(id); setConfirmDelete(null); load()
+  const handleDelete = async (id: number) => {
+    await deleteProduct(id); setConfirmDelete(null); load()
   }
 
   const field = (key: keyof typeof form, label: string, type = 'text', opts?: string[]) => (
@@ -121,7 +123,6 @@ export default function AdminProductsPage() {
         </table>
       </div>
 
-      {/* Modal */}
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'white', borderRadius: '20px', padding: '2rem', width: '100%', maxWidth: '560px', maxHeight: '90vh', overflowY: 'auto' }}>
@@ -147,8 +148,8 @@ export default function AdminProductsPage() {
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', justifyContent: 'flex-end' }}>
               <button onClick={closeModal} className="btn-outline" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>Cancelar</button>
-              <button onClick={handleSave} className="btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
-                <Check size={16} /> Guardar
+              <button onClick={handleSave} disabled={saving} className="btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.875rem' }}>
+                <Check size={16} /> {saving ? 'Guardando...' : 'Guardar'}
               </button>
             </div>
           </div>

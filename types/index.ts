@@ -42,6 +42,7 @@ export interface OrderRecord {
   total: number
   subtotal?: number
   shippingCost?: number
+  shippingLabel?: string
   discountAmount?: number
   discountCode?: string
   status?: string

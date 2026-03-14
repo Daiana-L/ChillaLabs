@@ -12,11 +12,11 @@ export default function AdminSidebar() {
   const [counts, setCounts] = useState({ orders: 0, preorders: 0 })
 
   useEffect(() => {
-    const orders = getAllOrders()
-    const products = getAllProducts()
-    const preventaNames = new Set(products.filter(p => p.type === 'preventa').map(p => p.name))
-    const preorders = orders.filter(o => o.items.some(i => preventaNames.has(i.name)))
-    setCounts({ orders: orders.length, preorders: preorders.length })
+    Promise.all([getAllOrders(), getAllProducts()]).then(([orders, products]) => {
+      const preventaNames = new Set(products.filter(p => p.type === 'preventa').map(p => p.name))
+      const preorders = orders.filter(o => o.items.some(i => preventaNames.has(i.name)))
+      setCounts({ orders: orders.length, preorders: preorders.length })
+    })
   }, [pathname])
 
   const handleLogout = async () => {

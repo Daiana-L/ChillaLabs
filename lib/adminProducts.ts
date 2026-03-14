@@ -1,57 +1,59 @@
-import { PRODUCTS } from '@/lib/products'
 import { Product } from '@/types'
 
-const STORE_KEY = 'chillalabs_admin_products'
-const DELETED_KEY = 'chillalabs_admin_deleted'
-
-function getDeleted(): number[] {
-  try { return JSON.parse(localStorage.getItem(DELETED_KEY) || '[]') } catch { return [] }
-}
-
-function saveDeleted(ids: number[]) {
-  localStorage.setItem(DELETED_KEY, JSON.stringify(ids))
-}
-
-export function getAdminProducts(): Product[] {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]') } catch { return [] }
-}
-
-function saveAdminProducts(list: Product[]) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(list))
-}
-
-export function getAllProducts(): Product[] {
-  const deleted = getDeleted()
-  const admin = getAdminProducts()
-  const adminIds = new Set(admin.map(p => p.id))
-  const base = PRODUCTS.filter(p => !deleted.includes(p.id) && !adminIds.has(p.id))
-  return [...base, ...admin.filter(p => !deleted.includes(p.id))]
-}
-
-export function addProduct(data: Omit<Product, 'id'>): Product {
-  const all = [...PRODUCTS, ...getAdminProducts()]
-  const maxId = all.reduce((m, p) => Math.max(m, p.id), 0)
-  const product: Product = { ...data, id: maxId + 1 }
-  const list = getAdminProducts()
-  list.push(product)
-  saveAdminProducts(list)
-  return product
-}
-
-export function updateProduct(updated: Product) {
-  const list = getAdminProducts()
-  const idx = list.findIndex(p => p.id === updated.id)
-  if (idx >= 0) {
-    list[idx] = updated
-  } else {
-    list.push(updated)
+function dbToProduct(row: Record<string, unknown>): Product {
+  return {
+    id: row.id as number,
+    name: row.name as string,
+    price: row.price as number,
+    originalPrice: (row.original_price as number) ?? undefined,
+    category: row.category as string,
+    type: row.type as 'stock' | 'preventa',
+    series: row.series as string,
+    size: row.size as string,
+    bg: (row.bg as string) || '#F5EBFD',
+    image: (row.image as string) || undefined,
+    description: (row.description as string) || undefined,
+    desc: (row.description as string) || undefined,
+    wait: (row.wait as string) || undefined,
+    stock: (row.stock as number) || 0,
   }
-  saveAdminProducts(list)
 }
 
-export function deleteProduct(id: number) {
-  const deleted = getDeleted()
-  if (!deleted.includes(id)) saveDeleted([...deleted, id])
-  const list = getAdminProducts().filter(p => p.id !== id)
-  saveAdminProducts(list)
+export async function getAllProducts(): Promise<Product[]> {
+  const res = await fetch('/api/admin/products', { cache: 'no-store', credentials: 'include' })
+  if (!res.ok) {
+    console.error('getAllProducts error:', res.status, await res.text())
+    return []
+  }
+  const data = await res.json()
+  return data.map(dbToProduct)
+}
+
+export async function addProduct(data: Omit<Product, 'id'>): Promise<Product> {
+  const res = await fetch('/api/admin/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+    credentials: 'include',
+  })
+  const row = await res.json()
+  return dbToProduct(row)
+}
+
+export async function updateProduct(product: Product): Promise<void> {
+  await fetch('/api/admin/products', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(product),
+    credentials: 'include',
+  })
+}
+
+export async function deleteProduct(id: number): Promise<void> {
+  await fetch('/api/admin/products', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id }),
+    credentials: 'include',
+  })
 }

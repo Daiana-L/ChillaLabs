@@ -13,12 +13,12 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [remember, setRemember] = useState(false)
+
   const [showPass, setShowPass] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     if (!email || !password) {
@@ -26,16 +26,14 @@ export default function LoginPage() {
       return
     }
     setLoading(true)
-    setTimeout(() => {
-      const ok = login(email.trim(), password, remember)
-      setLoading(false)
-      if (ok) {
-        showToast('¡Bienvenida de vuelta!')
-        router.replace('/cuenta')
-      } else {
-        setError('Email o contraseña incorrectos.')
-      }
-    }, 400)
+    const result = await login(email.trim(), password)
+    setLoading(false)
+    if (result === true) {
+      showToast('¡Bienvenida de vuelta!')
+      router.replace('/cuenta')
+    } else {
+      setError('Email o contraseña incorrectos.')
+    }
   }
 
   return (
@@ -97,16 +95,7 @@ export default function LoginPage() {
           </div>
 
           <div className="form-row-check">
-            <label className="check-left">
-              <input
-                type="checkbox"
-                className="form-check"
-                id="remember"
-                checked={remember}
-                onChange={e => setRemember(e.target.checked)}
-              />
-              <span className="form-check-label">Recordarme</span>
-            </label>
+            <span />
             <a className="link-forgot" onClick={() => {}}>¿Olvidaste tu contraseña?</a>
           </div>
 

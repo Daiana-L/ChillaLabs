@@ -10,15 +10,15 @@ export default function AdminPreordersPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([])
   const [selected, setSelected] = useState<AdminOrder | null>(null)
 
-  const load = () => {
-    const products = getAllProducts()
+  const load = async () => {
+    const [allOrders, products] = await Promise.all([getAllOrders(), getAllProducts()])
     const preventaNames = new Set(products.filter(p => p.type === 'preventa').map(p => p.name))
-    setOrders(getAllOrders().filter(o => o.items.some(i => preventaNames.has(i.name))))
+    setOrders(allOrders.filter(o => o.items.some(i => preventaNames.has(i.name))))
   }
   useEffect(() => { load() }, [])
 
-  const handleStatus = (orderNum: string, status: string) => {
-    updateOrderStatus(orderNum, status)
+  const handleStatus = async (orderNum: string, status: string) => {
+    await updateOrderStatus(orderNum, status)
     load()
     if (selected?.orderNum === orderNum) setSelected(o => o ? { ...o, status } : o)
   }

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, ShoppingBag, Calculator, Mail, Clock, Truck, CreditCard, Landmark, Lock, ShieldCheck, Tag, X, User } from 'lucide-react'
 import { useCart } from '@/lib/CartContext'
@@ -15,6 +15,7 @@ export default function CheckoutPage() {
   const { cart, cartTotal, discountApplied, discountCode, clearCart } = useCart()
   const { currentUser, saveOrder } = useAuth()
   const { showToast } = useToast()
+  const checkingOut = useRef(false)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -26,6 +27,8 @@ export default function CheckoutPage() {
   const [message, setMessage] = useState('')
   const [shipping, setShipping] = useState<CheckoutShipping | null>(null)
   const [payment, setPayment] = useState<'mp' | 'transfer' | null>(null)
+  const [shipOptions, setShipOptions] = useState<Record<string, CheckoutShipping> | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (currentUser) {
@@ -38,10 +41,11 @@ export default function CheckoutPage() {
     }
   }, [currentUser])
 
-  if (cart.length === 0) {
-    router.replace('/carrito')
-    return null
-  }
+  useEffect(() => {
+    if (cart.length === 0 && !checkingOut.current) router.replace('/carrito')
+  }, [cart.length, router])
+
+  if (cart.length === 0) return null
 
   const subtotal = cart.reduce((s, i) => s + i.product.price * i.quantity, 0)
   const discountAmount = discountApplied ? subtotal * 0.15 : 0
@@ -58,9 +62,8 @@ export default function CheckoutPage() {
     })
     setShipping(null)
   }
-  const [shipOptions, setShipOptions] = useState<Record<string, CheckoutShipping> | null>(null)
 
-  const confirmOrder = () => {
+  const confirmOrder = async () => {
     if (!name || !email || !address || !city || !province) {
       showToast('Completá todos los campos obligatorios (*)')
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -69,16 +72,18 @@ export default function CheckoutPage() {
     if (!shipping) { showToast('Calculá y seleccioná un método de envío'); return }
     if (!payment) { showToast('Seleccioná un método de pago'); return }
 
+    setSubmitting(true)
     const orderNum = 'CHL-' + Date.now().toString().slice(-6)
     if (currentUser) {
       const today = new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' })
-      saveOrder({
+      await saveOrder({
         orderNum,
         date: today,
         items: cart.map(i => ({ name: i.product.name, qty: i.quantity, price: i.product.price })),
         total,
         subtotal,
         shippingCost: shipping?.cost ?? 0,
+        shippingLabel: shipping?.label ?? '',
         discountAmount: discountAmount || 0,
         discountCode: discountApplied ? discountCode : undefined,
         status: payment === 'mp' ? 'paid' : 'pending',
@@ -104,8 +109,10 @@ export default function CheckoutPage() {
       shipping,
       items: cart.map(i => ({ name: i.product.name, series: i.product.series, qty: i.quantity, price: i.product.price, bg: i.product.bg })),
       buyerName: name,
+      _ts: Date.now(),
     }))
 
+    checkingOut.current = true
     clearCart()
     router.push('/confirmacion')
   }
@@ -305,9 +312,9 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <button className="btn-primary" onClick={confirmOrder} style={{width:'100%',justifyContent:'center',padding:'1.1rem',fontSize:'1.05rem'}}>
+          <button className="btn-primary" onClick={confirmOrder} disabled={submitting} style={{width:'100%',justifyContent:'center',padding:'1.1rem',fontSize:'1.05rem'}}>
             <Lock size={16} />
-            Confirmar pedido
+            {submitting ? 'Procesando...' : 'Confirmar pedido'}
           </button>
           <p style={{textAlign:'center',fontSize:'0.78rem',color:'var(--text-light)',marginTop:'0.75rem',display:'flex',alignItems:'center',justifyContent:'center',gap:'5px'}}>
             <ShieldCheck size={13} />

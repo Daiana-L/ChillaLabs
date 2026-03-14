@@ -8,14 +8,14 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState({ total: 0, stock: 0, preventa: 0, orders: 0, pending: 0 })
 
   useEffect(() => {
-    const products = getAllProducts()
-    const orders = getAllOrders()
-    setStats({
-      total: products.length,
-      stock: products.filter(p => p.type === 'stock').length,
-      preventa: products.filter(p => p.type === 'preventa').length,
-      orders: orders.length,
-      pending: orders.filter(o => o.status === 'pending').length,
+    Promise.all([getAllProducts(), getAllOrders()]).then(([products, orders]) => {
+      setStats({
+        total: products.length,
+        stock: products.filter(p => p.type === 'stock').length,
+        preventa: products.filter(p => p.type === 'preventa').length,
+        orders: orders.length,
+        pending: orders.filter(o => o.status === 'pending').length,
+      })
     })
   }, [])
 

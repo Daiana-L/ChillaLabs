@@ -161,7 +161,7 @@ export default function ProductoPage() {
                 <span className="detail-price-discounted show">${discountedPrice.toFixed(2)}</span>
               </>
             ) : (
-              <span className="detail-price-original" style={{ fontSize: '2.4rem' }}>${product.price.toFixed(2)}</span>
+              <span className="detail-price-original">${product.price.toFixed(2)}</span>
             )}
           </div>
 
@@ -256,7 +256,7 @@ export default function ProductoPage() {
 
       {/* Related products */}
       {related.length > 0 && (
-        <section className="section" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+        <section className="section" style={{ paddingTop: '0', paddingBottom: '3rem' }}>
           <div className="section-inner">
             <h2 className="section-title" style={{ fontSize: '1.4rem', textAlign: 'left', marginBottom: '1.5rem' }}>
               También te puede gustar

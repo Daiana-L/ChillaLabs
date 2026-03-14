@@ -245,7 +245,8 @@ export default function SobreMiPage() {
 
             <p style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, fontSize: '0.95rem', marginBottom: '1.75rem' }}>
               A veces hago stream mientras juego o pinto figuras.
-              Si te gusta el anime o los videojuegos, podés pasar a charlar.
+              Si te gusta el anime o los videojuegos, podés pasar a charlar.{' '}
+              <span style={{ color: 'rgba(255,255,255,0.95)', fontWeight: 700 }}>Y sí — en los directos solemos tirar códigos de descuento para la tienda 👀</span>
             </p>
 
             <div className="twitch-pill">

@@ -21,7 +21,7 @@ export default function RegistroPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
@@ -43,18 +43,20 @@ export default function RegistroPage() {
     }
 
     setLoading(true)
-    setTimeout(() => {
-      const result = register(name.trim(), email.trim(), phone.trim(), password)
-      setLoading(false)
-      if (result === true) {
-        showToast('¡Cuenta creada! Bienvenida a ChillaLabs 🎉')
-        router.replace('/cuenta')
-      } else if (result === 'exists') {
-        setError('Ya existe una cuenta con ese email.')
-      } else {
-        setError('Ocurrió un error. Intentá de nuevo.')
-      }
-    }, 400)
+    const result = await register(name.trim(), email.trim(), phone.trim(), password)
+    setLoading(false)
+    if (result === true) {
+      showToast('¡Cuenta creada! Bienvenida a ChillaLabs 🎉')
+      router.replace('/cuenta')
+    } else if (result === 'exists') {
+      setError('Ya existe una cuenta con ese email. ¿Querés iniciar sesión?')
+    } else if (result === 'rate_limit') {
+      setError('Demasiados intentos. Esperá unos minutos y volvé a intentar.')
+    } else if (result === 'weak_password') {
+      setError('La contraseña debe tener al menos 6 caracteres.')
+    } else {
+      setError('No se pudo crear la cuenta. Verificá los datos e intentá de nuevo.')
+    }
   }
 
   return (

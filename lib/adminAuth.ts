@@ -13,7 +13,8 @@ function toBase64url(buf: ArrayBuffer): string {
 }
 
 function fromBase64url(str: string): ArrayBuffer {
-  return Buffer.from(str, 'base64url').buffer as ArrayBuffer
+  const buf = Buffer.from(str, 'base64url')
+  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer
 }
 
 function todayStr(): string {

@@ -9,11 +9,11 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<AdminOrder[]>([])
   const [selected, setSelected] = useState<AdminOrder | null>(null)
 
-  const load = () => setOrders(getAllOrders())
+  const load = () => getAllOrders().then(setOrders)
   useEffect(() => { load() }, [])
 
-  const handleStatus = (orderNum: string, status: string) => {
-    updateOrderStatus(orderNum, status)
+  const handleStatus = async (orderNum: string, status: string) => {
+    await updateOrderStatus(orderNum, status)
     load()
     if (selected?.orderNum === orderNum) setSelected(o => o ? { ...o, status } : o)
   }
