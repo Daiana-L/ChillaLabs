@@ -12,8 +12,8 @@ function toBase64url(buf: ArrayBuffer): string {
   return Buffer.from(buf).toString('base64url')
 }
 
-function fromBase64url(str: string): Uint8Array {
-  return new Uint8Array(Buffer.from(str, 'base64url'))
+function fromBase64url(str: string): ArrayBuffer {
+  return Buffer.from(str, 'base64url').buffer as ArrayBuffer
 }
 
 function todayStr(): string {
